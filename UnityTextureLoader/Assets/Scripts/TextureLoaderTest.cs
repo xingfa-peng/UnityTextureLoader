@@ -28,29 +28,29 @@ namespace Inking
 
         void LoadTexture(string fileName)
         {
-            Debug.Log("pxf...fileName : " + fileName);
             Inking.TextureLoader.Instance.LoadAsync(fileName,
                 (texture2D) =>
                 {
-                    Debug.Log("Load Texture Succeed");
+                    Debug.Log("Load Texture Succeed : " + fileName);
                     rawImage.texture = texture2D.ToUnityTexture2D();
 
                     _texture2D = texture2D;
                 },
                 () =>
                 {
-                    Debug.LogError("Load Texture Failed");
+                    Debug.LogError("Load Texture Failed : " + fileName);
                 });
-        }
-
-        void OnImageOpened(string fileName)
-        {
-            LoadTexture(fileName);
         }
 
         public void OnButtonClicked()
         {
-            NativeGallery.GetImageFromGallery(OnImageOpened);
+            NativeGallery.GetImageFromGallery((fileName)=>
+            {
+                if (string.IsNullOrEmpty(fileName))
+                    return;
+
+                LoadTexture(fileName);
+            });
         }
     }
 
