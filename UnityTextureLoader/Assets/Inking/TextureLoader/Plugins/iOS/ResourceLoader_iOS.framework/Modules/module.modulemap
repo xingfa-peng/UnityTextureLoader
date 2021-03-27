@@ -1,0 +1,6 @@
+framework module ResourceLoader_iOS {
+  umbrella header "ResourceLoader_iOS.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,17 @@
+InkingTextureLoader/.vs/
+InkingTextureLoader/Library/
+InkingTextureLoader/obj/
+InkingTextureLoader/Temp/
+NativeCode/build_android/
+NativeCode/build_windows/
+NativeCode/lib/
+InkingTextureLoader/Assembly*
+InkingTextureLoader/Logs/
+UnityTextureLoader/Library/
+UnityTextureLoader/Temp/
+UnityTextureLoader/ProjectSettings/
+UnityTextureLoader/obj/
+UnityTextureLoader/.vs/
+InkingTextureLoader/lib/
+InkingTextureLoader/build_windows/
+InkingTextureLoader/build_android/
