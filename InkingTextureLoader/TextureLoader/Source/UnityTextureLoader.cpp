@@ -76,14 +76,14 @@ namespace Inking
             break;
         case kUnityGfxRendererOpenGLES20:
         {
-#ifdef _OPENGELS_
+#ifdef _OPENGLES_
             _impl = new TextureLoaderOpenGLES2();
 #endif
             break;
         }
         case kUnityGfxRendererOpenGLES30:
         {
-#ifdef _OPENGELS_
+#ifdef _OPENGLES_
             _impl = new TextureLoaderOpenGLES3();
 #endif
             break;

@@ -17,3 +17,5 @@ InkingTextureLoader/build_windows/
 InkingTextureLoader/build_android/
 UnityTextureLoader/Logs/
 UnityTextureLoader/Packages/
+UnityTextureLoader/Assembly*
+UnityTextureLoader/build_android/

@@ -19,6 +19,8 @@ namespace Inking
         [DllImport(TextureLoader.DllName)]
         static extern void Inking_Texture2D_Release(IntPtr native);
 
+        public string Name;
+
         IntPtr _native;
 
         public Texture2D(IntPtr native)
@@ -63,14 +65,18 @@ namespace Inking
             }
         }
 
-        UnityEngine.Texture2D ToUnityTexture2D()
+        public UnityEngine.Texture2D ToUnityTexture2D()
         {
-            return UnityEngine.Texture2D.CreateExternalTexture(Width,
+            var texture = UnityEngine.Texture2D.CreateExternalTexture(Width,
                         Height,
                         Format,
                         false,
                         true,
                         Native);
+
+            texture.name = this.Name;
+
+            return texture;
         }
     };
 }

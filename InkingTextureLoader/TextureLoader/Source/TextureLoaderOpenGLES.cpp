@@ -68,16 +68,11 @@ namespace Inking
 
         eglMakeCurrent(_display, EGL_NO_SURFACE, EGL_NO_SURFACE, _context);
 
-        while (true)
+        while (isLoadThreadRuning)
         {
             sleep(0);
 
             DoUnload();
-
-            if (_context == nullptr)
-            {
-                continue;
-            }
 
             _mutexStage1.lock();
 
@@ -106,11 +101,22 @@ namespace Inking
 
         stbi_set_flip_vertically_on_load(1);
         auto pixels = stbi_load(fileName, &width, &height, &comp, 4);
+        if (pixels == nullptr)
+        {
+            operation->OnLoadFailed();
+            return;
+        }
 
         Texture2D* texture2D = new Texture2D(this);
         operation->SetTexture(texture2D);
         GLuint texID = 0;
         glGenTextures(1, &texID);
+        if (texID == 0)
+        {
+            operation->OnLoadFailed();
+            return;
+        }
+
         glBindTexture(GL_TEXTURE_2D, texID);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
@@ -128,8 +134,6 @@ namespace Inking
         texture2D->SetWidth(width);
         texture2D->SetHeight(height);
         operation->SetState(TextureLoadAsyncOperationState::LoadSucceed);
-
-
     }
 
     TextureLoadAsyncOperation* TextureLoaderOpenGLES::LoadAsync(const Char * fileName)

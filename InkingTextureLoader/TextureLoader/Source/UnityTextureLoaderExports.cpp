@@ -12,11 +12,17 @@ extern "C"
 {
     int Inking_Texture2D_GetWidth(Inking::Texture2D* _this)
     {
+        if (_this == nullptr)
+            return 0;
+
         return _this->GetWidth();
     }
 
     int Inking_Texture2D_GetHeight(Inking::Texture2D* _this)
     {
+        if (_this == nullptr)
+            return 0;
+
         return _this->GetHeight();
     }
 
@@ -30,6 +36,9 @@ extern "C"
 
     void* Inking_Texture2D_GetNative(Inking::Texture2D* _this)
     {
+        if (_this == nullptr)
+            return nullptr;
+
         return _this->GetNative();
     }
 
@@ -37,8 +46,10 @@ extern "C"
         return new Inking::TextureLoadAsyncOperation();
     }
 
-    void Inking_TextureLoadAsyncOperation_Release(Inking::TextureLoadAsyncOperation* _this) {
-        _this->Release();
+    void Inking_TextureLoadAsyncOperation_Release(Inking::TextureLoadAsyncOperation* _this) 
+    {
+        if (_this)
+            _this->Release();
     }
 
     int Inking_TextureLoadAsyncOperation_GetState(Inking::TextureLoadAsyncOperation* _this)
@@ -51,6 +62,9 @@ extern "C"
 
     const Inking::Texture* Inking_TextureLoadAsyncOperation_GetTexture(Inking::TextureLoadAsyncOperation* _this)
     {
+        if (_this == nullptr)
+            return nullptr;
+
         return _this->GetTexture();
     }
 
@@ -61,17 +75,22 @@ extern "C"
 
     Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsync(Inking::UnityTextureLoader* _this, const Char* fileName)
     {
+        if (_this == nullptr)
+            return nullptr;
+
         return _this->LoadAsync(fileName);
     }
 
     void Inking_TextureLoader_Update(Inking::UnityTextureLoader* _this)
     {
-        _this->Update();
+        if (_this)
+            _this->Update();
     }
 
     void Inking_TextureLoader_Unload(Inking::UnityTextureLoader* _this, void* native)
     {
-        _this->Unload(native);
+        if (_this)
+            _this->Unload(native);
     }
 }
 

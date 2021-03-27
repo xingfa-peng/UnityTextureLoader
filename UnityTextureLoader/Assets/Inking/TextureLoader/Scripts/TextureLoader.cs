@@ -38,6 +38,10 @@ namespace Inking
         {
         }
 
+        ~TextureLoader()
+        {
+        }
+
         static TextureLoader _instance;
         public static TextureLoader Instance
         {
@@ -66,7 +70,9 @@ namespace Inking
         public TextureLoadAsyncOperation LoadAsync(string fileName)
         {
             IntPtr ptr = Inking_TextureLoader_LoadAsync(_native, fileName);
-            return new TextureLoadAsyncOperation(ptr);
+            var operation = new TextureLoadAsyncOperation(ptr);
+            operation.fileName = fileName;
+            return operation;
         }
 
         public void Update()
@@ -77,8 +83,9 @@ namespace Inking
         IEnumerator _LoadAsync(string fileName, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
         {
             var operation = LoadAsync(fileName);
+
             yield return operation;
-            
+
             if (operation.state == TextureLoadAsyncOperationState.LoadSucceed)
             {
                 onLoadSucceed?.Invoke(operation.texture2D);

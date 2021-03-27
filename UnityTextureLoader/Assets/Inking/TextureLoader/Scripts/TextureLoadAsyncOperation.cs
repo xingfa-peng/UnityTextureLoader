@@ -32,7 +32,6 @@ namespace Inking
             _native = native;
         }
 
-
         ~TextureLoadAsyncOperation()
         {
             Inking_TextureLoadAsyncOperation_Release(_native);
@@ -55,6 +54,8 @@ namespace Inking
             }
         }
 
+        public string fileName;
+
         Texture2D _texture2D;
 
         public Texture2D texture2D
@@ -65,6 +66,7 @@ namespace Inking
                 {
                     IntPtr nativeTex = Inking_TextureLoadAsyncOperation_GetTexture(_native);
                     _texture2D = new Inking.Texture2D(nativeTex);
+                    _texture2D.Name = this.fileName;
                 }
                 return _texture2D;
             }
