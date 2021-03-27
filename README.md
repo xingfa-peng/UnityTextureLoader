@@ -1,0 +1,14 @@
+# UnityTextureLoader
+
+Load texture asynchronously for Unity
+
+## support platforms And GraphicsType
+
+### Windows
+  Architectures: x86_64
+  GraphicsType : D3D11
+
+### android
+  Architectures : armv7a, arm64
+  GraphicsType : OpenGLES2, OpenGLES3
+  
