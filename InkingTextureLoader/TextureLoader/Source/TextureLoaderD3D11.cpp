@@ -138,8 +138,13 @@ namespace Inking
 
     TextureLoadAsyncOperation* TextureLoaderD3D11::LoadAsync(const Char* fileName)
     {
-        _stage1Mutex.lock();
         auto operation = new TextureLoadAsyncOperation();
+        if (fileName == nullptr)
+        {
+            operation->OnLoadFailed();
+            return operation;
+        }
+        _stage1Mutex.lock();
         _stage1Operations.push_back(operation);
         operation->SetFileName(fileName);
         _stage1Mutex.unlock();

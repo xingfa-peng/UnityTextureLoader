@@ -138,8 +138,13 @@ namespace Inking
 
     TextureLoadAsyncOperation* TextureLoaderOpenGLES::LoadAsync(const Char * fileName)
     {
-        _mutexStage1.lock();
         TextureLoadAsyncOperation* operation = new TextureLoadAsyncOperation();
+        if (fileName == nullptr)
+        {
+            operation->OnLoadFailed();
+            return operation;
+        }
+        _mutexStage1.lock();
         _stage1Operations.push_back(operation);
         operation->SetFileName(fileName);
         _mutexStage1.unlock();

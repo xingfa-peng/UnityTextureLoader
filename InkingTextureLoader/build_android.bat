@@ -5,7 +5,7 @@ cmake.exe ^
 -B"./build_android" ^
 -DANDROID_ABI=armeabi-v7a ^
 -DANDROID_PLATFORM=android-16 ^
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY="../Android/libs/armeabi-v7a" ^
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="../../lib/Android/jni/armeabi-v7a" ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DANDROID_NDK=%ANDROID_HOME%\ndk-bundle ^
 -DCMAKE_CXX_FLAGS= ^
@@ -26,7 +26,7 @@ cmake.exe ^
 -B"./build_android" ^
 -DANDROID_ABI=arm64-v8a ^
 -DANDROID_PLATFORM=android-16 ^
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY="../Android/libs/arm64-v8" ^
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="../../lib/Android/jni/arm64-v8a" ^
 -DCMAKE_BUILD_TYPE=Release ^
 -DANDROID_NDK=%ANDROID_HOME%\ndk-bundle ^
 -DCMAKE_CXX_FLAGS= ^
@@ -40,6 +40,7 @@ cmake.exe ^
 
 :: make ...
 ninja all -C build_android
+
 
 :: xcopy /Y /E "build_android/Android" "UnityResourceLoader\Assets\Inking\ResourceLoader\Plugins\Android"
 

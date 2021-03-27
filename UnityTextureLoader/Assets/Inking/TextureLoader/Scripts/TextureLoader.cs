@@ -86,7 +86,8 @@ namespace Inking
 
             yield return operation;
 
-            if (operation.state == TextureLoadAsyncOperationState.LoadSucceed)
+            if (operation != null 
+                && operation.state == TextureLoadAsyncOperationState.LoadSucceed)
             {
                 onLoadSucceed?.Invoke(operation.texture2D);
             }
