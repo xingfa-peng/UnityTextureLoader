@@ -12,3 +12,4 @@ Load texture asynchronously for Unity
   Architectures : armv7a, arm64
   GraphicsType : OpenGLES2, OpenGLES3
   
+Unity 2019.1.0
