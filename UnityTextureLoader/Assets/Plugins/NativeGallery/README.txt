@@ -13,17 +13,19 @@ for Android: set "Write Permission" to "External (SDCard)" in Player Settings
 for iOS: there are two ways to set up the plugin on iOS:
 
 a. Automated Setup for iOS
-- (optional) change the values of PHOTO_LIBRARY_USAGE_DESCRIPTION and PHOTO_LIBRARY_ADDITIONS_USAGE_DESCRIPTION in Plugins/NativeGallery/Editor/NGPostProcessBuild.cs
-- (Unity 2017.4 or earlier) if your minimum Deployment Target (iOS Version) is at least 8.0, set the value of MINIMUM_TARGET_8_OR_ABOVE to true in NGPostProcessBuild.cs
+- (optional) change the values of 'Photo Library Usage Description' and 'Photo Library Additions Usage Description' at 'Project Settings/yasirkula/Native Gallery'
+- (Unity 2017.4 or earlier) if your minimum Deployment Target (iOS Version) is at least 8.0, set the value of 'Deployment Target Is 8.0 Or Above' to true at 'Project Settings/yasirkula/Native Gallery'
 
 b. Manual Setup for iOS
-- set the value of ENABLED to false in NGPostProcessBuild.cs
+- set the value of 'Automated Setup' to false at 'Project Settings/yasirkula/Native Gallery'
 - build your project
 - enter a Photo Library Usage Description to Info.plist in Xcode
 - also enter a "Photo Library Additions Usage Description" to Info.plist in Xcode, if exists
 - set Info.plist's "Prevent limited photos access alert" property's value to 1 in Xcode, if exists
-- insert "-weak_framework PhotosUI -weak_framework Photos -framework AssetsLibrary -framework MobileCoreServices -framework ImageIO" to the "Other Linker Flags" of Unity-iPhone Target (if your Deployment Target is at least 8.0, it is sufficient to insert "-weak_framework PhotosUI -framework Photos -framework MobileCoreServices -framework ImageIO")
-- lastly, remove Photos.framework and PhotosUI.framework from Link Binary With Libraries of Unity-iPhone Target in Build Phases, if exists
+- insert "-weak_framework PhotosUI -weak_framework Photos -framework AssetsLibrary -framework MobileCoreServices -framework ImageIO" to the "Other Linker Flags" of Unity-iPhone Target (and UnityFramework Target on Unity 2019.3 or newer) (if your Deployment Target is at least 8.0, it is sufficient to insert "-weak_framework PhotosUI -framework Photos -framework MobileCoreServices -framework ImageIO")
+- lastly, remove Photos.framework and PhotosUI.framework from Link Binary With Libraries of Unity-iPhone Target (and UnityFramework Target on Unity 2019.3 or newer) in Build Phases, if exists
+
+IMPORTANT: If you are targeting iOS 14 or later, you need to build your app with Xcode 12 or later to avoid any permission issues.
 
 
 3. FAQ
@@ -34,7 +36,7 @@ You can't. On iOS, these files are stored in an internal directory that we have 
 "android:requestLegacyExternalStorage" attribute in AndroidManifest.xml fixes a rare UnauthorizedAccessException on Android 10 but requires you to update your Android SDK to at least SDK 29. If this isn't possible for you, you should open NativeGallery.aar with WinRAR or 7-Zip and then remove the "<application ... />" tag from AndroidManifest.xml.
 
 - Can't access the Gallery, it says "java.lang.ClassNotFoundException: com.yasirkula.unity.NativeGallery" in Logcat
-If your project uses ProGuard, try adding the following line to ProGuard filters: -keep class com.yasirkula.unity.* { *; }
+If you are sure that your plugin is up-to-date, then enable "Custom Proguard File" option from Player Settings and add the following line to that file: -keep class com.yasirkula.unity.* { *; }
 
 - Nothing happens when I try to access the Gallery on Android
 Make sure that you've set the "Write Permission" to "External (SDCard)" in Player Settings.

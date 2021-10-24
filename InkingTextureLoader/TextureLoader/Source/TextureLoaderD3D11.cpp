@@ -1,7 +1,6 @@
 #ifdef _D3D11_
 
 #include "TextureLoaderD3D11.h"
-#include <D3DX11tex.h>
 #include "Texture2D.h"
 
 #define STBI_WINDOWS_UTF8

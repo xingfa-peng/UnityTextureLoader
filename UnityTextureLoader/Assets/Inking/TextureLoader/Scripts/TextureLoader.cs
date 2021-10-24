@@ -89,11 +89,13 @@ namespace Inking
             if (operation != null 
                 && operation.state == TextureLoadAsyncOperationState.LoadSucceed)
             {
-                onLoadSucceed?.Invoke(operation.texture2D);
+                if(onLoadSucceed != null)
+                    onLoadSucceed.Invoke(operation.texture2D);
             }
             else
             {
-                onLoadFailed?.Invoke();
+                if(onLoadFailed != null)
+                    onLoadFailed.Invoke();
             }
         }
 

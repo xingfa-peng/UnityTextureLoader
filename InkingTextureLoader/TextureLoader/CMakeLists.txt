@@ -40,12 +40,6 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 if(MSVC)
 target_link_libraries(TextureLoader
-d3d11.lib
-d3dcompiler.lib
-d3dx11d.lib
-d3dx9d.lib
-dxerr.lib
-dxguid.lib
 winmm.lib
 )
 else()
