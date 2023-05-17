@@ -13,3 +13,6 @@ Load texture asynchronously for Unity
   GraphicsType : OpenGLES2, OpenGLES3
   
 Unity 2019.1.0
+
+ANDROID_PLATFORM=android-16
+ANDROID_NDK=android-ndk-r16b
