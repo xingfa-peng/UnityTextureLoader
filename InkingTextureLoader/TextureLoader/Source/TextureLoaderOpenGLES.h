@@ -3,7 +3,7 @@
 #ifdef _OPENGLES_
 
 #include "ITextureLoader.h"
-#include <GLES2/gl2.h>
+#include <GLES3/gl3.h>
 #include <EGL/egl.h>
 #include <thread>
 #include <mutex>
@@ -47,7 +47,9 @@ namespace Inking
 
         virtual ~TextureLoaderOpenGLES();
 
-        virtual TextureLoadAsyncOperation* LoadAsync(const Char * fileName);
+        virtual TextureLoadAsyncOperation* LoadAsync(const Char * fileName, ColorSpace colorSpace);
+
+		virtual TextureLoadAsyncOperation* LoadAsyncFromMemory(const void* buffer, int bufferLen, ColorSpace colorSpace);
 
         virtual void Update();
 

@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #include "TextureLoadAsyncOperation.h"
-#include "TextureLoadAsyncOpeartionState.h"
+#include "TextureLoadAsyncOperationState.h"
 
 namespace Inking
 {
@@ -97,15 +97,33 @@ namespace Inking
         int width = 0;
         int height = 0;
         int comp = 0;
-        auto fileName = operation->GetFileName();
+        
+		stbi_set_flip_vertically_on_load(1);
+		unsigned char* pixels = nullptr;
 
-        stbi_set_flip_vertically_on_load(1);
-        auto pixels = stbi_load(fileName, &width, &height, &comp, 4);
-        if (pixels == nullptr)
-        {
-            operation->OnLoadFailed();
-            return;
-        }
+		switch (operation->GetLoadMode())
+		{
+		case TextureLoadMode::File:
+		{
+			const Char* fileName = operation->GetFileName();
+			pixels = stbi_load(fileName, &width, &height, &comp, 4);
+		}
+		break;
+		case TextureLoadMode::Memory:
+		{
+			auto buffer = operation->GetBuffer();
+			auto bufferLen = operation->GetBufferLen();
+			pixels = stbi_load_from_memory((const stbi_uc*)buffer, bufferLen, &width, &height, &comp, 4);
+		}
+		break;
+		default:
+			break;
+		}
+
+		if (pixels == nullptr) {
+			operation->OnLoadFailed();
+			return;
+		}
 
         Texture2D* texture2D = new Texture2D(this);
         operation->SetTexture(texture2D);
@@ -119,7 +137,11 @@ namespace Inking
 
         glBindTexture(GL_TEXTURE_2D, texID);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        auto colorSpace = operation->GetColorSpace();
+        if(colorSpace == ColorSpace::Gamma)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        else
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -130,13 +152,13 @@ namespace Inking
 
         stbi_image_free(pixels);
 
-        texture2D->SetNative((void*)(texID));
+        texture2D->SetNative((void*)(GLuint64)(texID));
         texture2D->SetWidth(width);
         texture2D->SetHeight(height);
         operation->SetState(TextureLoadAsyncOperationState::LoadSucceed);
     }
 
-    TextureLoadAsyncOperation* TextureLoaderOpenGLES::LoadAsync(const Char * fileName)
+    TextureLoadAsyncOperation* TextureLoaderOpenGLES::LoadAsync(const Char * fileName, ColorSpace colorSpace)
     {
         TextureLoadAsyncOperation* operation = new TextureLoadAsyncOperation();
         if (fileName == nullptr)
@@ -147,9 +169,22 @@ namespace Inking
         _mutexStage1.lock();
         _stage1Operations.push_back(operation);
         operation->SetFileName(fileName);
+        operation->SetColorSpace(colorSpace);
         _mutexStage1.unlock();
         return operation;
     }
+
+    TextureLoadAsyncOperation* TextureLoaderOpenGLES::LoadAsyncFromMemory(const void* buffer, int bufferLen, ColorSpace colorSpace)
+    {
+        _mutexStage1.lock();
+		TextureLoadAsyncOperation* operation = new TextureLoadAsyncOperation();
+		_stage1Operations.push_back(operation);
+		operation->SetBuffer((void*)buffer, bufferLen);
+		operation->SetColorSpace(colorSpace);
+		_mutexStage1.unlock();
+		return operation;
+    }
+
 
     void TextureLoaderOpenGLES::Update()
     {

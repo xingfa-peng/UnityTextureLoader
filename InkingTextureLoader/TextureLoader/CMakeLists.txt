@@ -13,12 +13,6 @@ cmake_minimum_required(VERSION 3.4.1)
 include_directories("${PROJECT_SOURCE_DIR}/ThirdParty/stb_image/source")
 include_directories("${PROJECT_SOURCE_DIR}/ThirdParty/UnityPluginAPI")
 
-if(MSVC)
-include_directories("$ENV{DXSDK_DIR}Include")
-link_directories("$ENV{DXSDK_DIR}Lib/x64")
-else()
-
-endif()
 
 if(MSVC)
     add_definitions(-D _D3D11_)

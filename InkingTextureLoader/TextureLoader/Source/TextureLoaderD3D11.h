@@ -11,45 +11,48 @@
 using namespace std;
 namespace Inking
 {
-    class TextureLoaderD3D11 : public ITextureLoader
-    {
-        ID3D11Device* _device = NULL;
+	class TextureLoaderD3D11 : public ITextureLoader
+	{
+		ID3D11Device* _device = NULL;
 
-        void Load(TextureLoadAsyncOperation* operation);
+		void Load(TextureLoadAsyncOperation* operation);
 
-        void _AsyncLoadThreadFunc();
+		void _AsyncLoadThreadFunc();
 
-        thread _thread;
+		thread _thread;
 
-        list<TextureLoadAsyncOperation*> _stage1Operations;
-        list<TextureLoadAsyncOperation*> _stage2Operations;
+		list<TextureLoadAsyncOperation*> _stage1Operations;
+		list<TextureLoadAsyncOperation*> _stage2Operations;
 
-        mutex _stage1Mutex;
-        mutex _stage2Mutex;
-        bool isLoadThreadRuning = true;
-    public:
-        TextureLoaderD3D11();
+		mutex _stage1Mutex;
+		mutex _stage2Mutex;
+		bool isLoadThreadRuning = true;
+	public:
+		TextureLoaderD3D11();
 
-        virtual ~TextureLoaderD3D11();
+		virtual ~TextureLoaderD3D11();
 
-        static void AsyncLoadThreadFunc(TextureLoaderD3D11* _this);
+		static void AsyncLoadThreadFunc(TextureLoaderD3D11* _this);
 
-        void LoadShared(TextureLoadAsyncOperation* operation);
+		void LoadShared(TextureLoadAsyncOperation* operation);
 
-        TextureLoadAsyncOperation* LoadAsync(const Char* fileName);
+		TextureLoadAsyncOperation* LoadAsync(const Char* fileName, ColorSpace colorSpace = ColorSpace::Linear);
 
-        virtual void Update();
+		virtual void Update();
 
-        virtual void Unload(void* nativeTex);
+		virtual void Unload(void* nativeTex);
 
-        virtual void OnUnityPluginLoad(IUnityInterfaces* unityInterfaces);
+		virtual void OnUnityPluginLoad(IUnityInterfaces* unityInterfaces);
 
-        virtual void OnUnityRenderingEvent(int eventID);
+		virtual void OnUnityRenderingEvent(int eventID);
 
-        virtual void OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType) {};
+		virtual void OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType) {};
 
-        virtual void OnUnityPluginUnload() {}
-    };
+		virtual void OnUnityPluginUnload() {}
+
+		virtual TextureLoadAsyncOperation* LoadAsyncFromMemory(const void* buffer, int bufferLen, ColorSpace colorSpace);
+	};
+
 }
 
 
