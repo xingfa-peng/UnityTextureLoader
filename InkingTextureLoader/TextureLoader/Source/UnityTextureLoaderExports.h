@@ -1,6 +1,5 @@
 #pragma once
 #include "Typedef.h"
-#include "ColorSpace.h"
 
 
 #ifdef _WIN32
@@ -11,10 +10,10 @@
 
 namespace Inking
 {
-class UnityTextureLoader;
-class TextureLoadAsyncOperation;
-class Texture;
-class Texture2D;
+    class UnityTextureLoader;
+    class TextureLoadAsyncOperation;
+    class Texture;
+    class Texture2D;
 }
 
 extern "C" 
@@ -37,11 +36,9 @@ extern "C"
     
     EXPORT Inking::UnityTextureLoader* Inking_TextureLoader_GetInstance();
     
-	EXPORT Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsync(Inking::UnityTextureLoader* _this, const Char* fileName, Inking::ColorSpace colorSpace);
+    EXPORT Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsync(Inking::UnityTextureLoader* _this, const Char* fileName);
 
     EXPORT void Inking_TextureLoader_Update(Inking::UnityTextureLoader* _this);
     
     EXPORT void Inking_TextureLoader_Unload(Inking::UnityTextureLoader* _this, void* native);
- 
-    EXPORT Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsyncFromMemory(Inking::UnityTextureLoader* _this, const void* buffer, int bufferLen, Inking::ColorSpace colorSpace);
 }

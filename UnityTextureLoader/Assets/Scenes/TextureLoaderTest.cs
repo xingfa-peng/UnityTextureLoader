@@ -1,80 +1,48 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Inking
 {
-
     public class TextureLoaderTest : MonoBehaviour
     {
         [SerializeField]
         RawImage rawImage;
 
-        // Start is called before the first frame update
+        Texture2D _texture2D;
+
+        // Use this for initialization
         void Start()
         {
-        }
-
-        public void LoadFromMemory()
-        {
-            NativeGallery.GetImageFromGallery((filePath) =>
-            {
-                if (filePath == null)
-                    return;
-
-                Inking.TextureLoader.Instance.LoadAsync(filePath
-                    , ColorSpace.Linear
-                    , (texture2D) =>
-                    {
-                        rawImage.texture = texture2D.ToUnityTexture2D();
-                        _texture = texture2D;
-                    }
-                    , () =>
-                    {
-                        Debug.LogError("load failed...");
-                    });
-            });
-        }
-
-        public void LoadFromFile()
-        {
-            NativeGallery.GetImageFromGallery((filePath) =>
-            {
-                if (filePath == null)
-                    return;
-
-                var bytes = File.ReadAllBytes(filePath);
-                Inking.TextureLoader.Instance.LoadAsyncFromMemory(bytes
-                    , ColorSpace.Gamma
-                    , (texture2D) =>
-                    {
-                        rawImage.texture = texture2D.ToUnityTexture2D();
-                        _texture = texture2D;
-                    }
-                    , () =>
-                    {
-                        Debug.LogError("load failed...");
-                    });
-            });
+            
         }
 
         // Update is called once per frame
         void Update()
         {
+            if(Input.GetMouseButtonUp(0))
+            {
+                UpdateTexture();
+            }
         }
 
-        string _path;
-
-        Inking.Texture2D _texture;
-
-        private void LateUpdate()
+        void UpdateTexture()
         {
-            GC.Collect();
-        }
+            NativeGallery.GetImageFromGallery((filePath) =>
+            {
+                TextureLoader.Instance.LoadAsync(filePath, (texture) =>
+                {
+                    rawImage.texture = texture.ToUnityTexture2D();
 
+                    _texture2D = texture;
+
+                }, () =>
+                {
+                    Debug.LogError("Load Failed : " + filePath);
+                });
+            });
+        }
     }
 
 }

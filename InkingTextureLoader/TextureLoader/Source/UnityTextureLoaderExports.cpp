@@ -73,11 +73,12 @@ extern "C"
         return Inking::UnityTextureLoader::GetInstance();
     }
 
-    Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsync(Inking::UnityTextureLoader* _this, const Char* fileName, Inking::ColorSpace colorSpace)
+    Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsync(Inking::UnityTextureLoader* _this, const Char* fileName)
     {
         if (_this == nullptr)
             return nullptr;
-		return _this->LoadAsync(fileName, colorSpace);
+
+        return _this->LoadAsync(fileName);
     }
 
     void Inking_TextureLoader_Update(Inking::UnityTextureLoader* _this)
@@ -91,16 +92,7 @@ extern "C"
         if (_this)
             _this->Unload(native);
     }
-
-    Inking::TextureLoadAsyncOperation* Inking_TextureLoader_LoadAsyncFromMemory(Inking::UnityTextureLoader* _this, const void* buffer, int bufferLen, Inking::ColorSpace colorSpace)
-    {
-        if (_this == nullptr)
-            return nullptr;
-
-        return _this->LoadAsyncFromMemory(buffer, bufferLen, colorSpace);
-    }
 }
-
 
 
 

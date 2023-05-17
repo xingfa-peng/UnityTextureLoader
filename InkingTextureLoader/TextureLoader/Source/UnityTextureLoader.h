@@ -21,12 +21,12 @@ namespace Inking
     public:
         static IUnityInterfaces* g_unityInterfaces;
 
-        virtual TextureLoadAsyncOperation* LoadAsync(const Char * fileName, ColorSpace colorSpace)
+        virtual TextureLoadAsyncOperation* LoadAsync(const Char * fileName)
         {
             if (_impl == nullptr)
                 return nullptr;
 
-            return _impl->LoadAsync(fileName, colorSpace);
+            return _impl->LoadAsync(fileName);
         }
 
         virtual void Update()
@@ -58,9 +58,6 @@ namespace Inking
         virtual void OnGraphicsDeviceEvent(UnityGfxDeviceEventType eventType);;
 
         virtual void OnUnityPluginUnload() {}
-
-
-		virtual TextureLoadAsyncOperation* LoadAsyncFromMemory(const void* buffer, int bufferLen, ColorSpace colorSpace);
     };
 
 }

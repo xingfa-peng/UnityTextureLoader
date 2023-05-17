@@ -21,16 +21,11 @@ namespace Inking
 
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
         [DllImport(DllName)]
-        static extern IntPtr Inking_TextureLoader_LoadAsync(IntPtr _native, [MarshalAs(UnmanagedType.LPWStr)]string fileName, ColorSpace colorSpace);
-
+        static extern IntPtr Inking_TextureLoader_LoadAsync(IntPtr _native, [MarshalAs(UnmanagedType.LPWStr)]string fileName);
 #else
         [DllImport(DllName)]
-        static extern IntPtr Inking_TextureLoader_LoadAsync(IntPtr _native, string fileName, ColorSpace colorSpace);
+        static extern IntPtr Inking_TextureLoader_LoadAsync(IntPtr _native, string fileName);
 #endif
-
-        [DllImport(DllName)]
-        static extern IntPtr Inking_TextureLoader_LoadAsyncFromMemory(IntPtr _native, byte[] buffer, int bufferLen, ColorSpace colorSpace);
-
         [DllImport(DllName)]
         static extern void Inking_TextureLoader_Update(IntPtr native);
 
@@ -72,29 +67,22 @@ namespace Inking
             GL.IssuePluginEvent(GetRenderEventFunc(), 1);
         }
 
-        public TextureLoadAsyncOperation LoadAsync(string fileName, ColorSpace colorSpace)
+        public TextureLoadAsyncOperation LoadAsync(string fileName)
         {
-            IntPtr ptr = Inking_TextureLoader_LoadAsync(_native, fileName, colorSpace);
+            IntPtr ptr = Inking_TextureLoader_LoadAsync(_native, fileName);
             var operation = new TextureLoadAsyncOperation(ptr);
             operation.fileName = fileName;
             return operation;
         }
-
-        public TextureLoadAsyncOperation LoadAsyncFromMemory(ref byte[] bytes, ColorSpace colorSpace)
-        {
-            IntPtr ptr = Inking_TextureLoader_LoadAsyncFromMemory(_native, bytes, bytes.Length, colorSpace);
-            return new TextureLoadAsyncOperation(ptr);
-        }
-
 
         public void Update()
         {
             Inking_TextureLoader_Update(_native);
         }
 
-        IEnumerator _LoadAsync(string fileName, ColorSpace colorSpace, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
+        IEnumerator _LoadAsync(string fileName, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
         {
-            var operation = LoadAsync(fileName, colorSpace);
+            var operation = LoadAsync(fileName);
 
             yield return operation;
 
@@ -111,29 +99,9 @@ namespace Inking
             }
         }
 
-        public void LoadAsync(string fileName, ColorSpace colorSpace, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
+        public void LoadAsync(string fileName, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
         {
-            StartCoroutine(_LoadAsync(fileName, colorSpace, onLoadSucceed, onLoadFailed));
-        }
-
-        IEnumerator _LoadAsyncFromMemory(byte[] bytes, ColorSpace colorSpace, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
-        {
-            var operation = LoadAsyncFromMemory(ref bytes, colorSpace);
-            yield return operation;
-
-            if (operation.state == TextureLoadAsyncOperationState.LoadSucceed)
-            {
-                onLoadSucceed?.Invoke(operation.texture2D);
-            }
-            else
-            {
-                onLoadFailed?.Invoke();
-            }
-        }
-
-        public void LoadAsyncFromMemory(byte[] buffer, ColorSpace colorSpace, Action<Texture2D> onLoadSucceed, Action onLoadFailed)
-        {
-            StartCoroutine(_LoadAsyncFromMemory(buffer, colorSpace, onLoadSucceed, onLoadFailed));
+            StartCoroutine(_LoadAsync(fileName, onLoadSucceed, onLoadFailed));
         }
     }
 }
