@@ -15,4 +15,5 @@ Load texture asynchronously for Unity
 Unity 2019.1.0
 
 ANDROID_PLATFORM=android-16
+
 ANDROID_NDK=android-ndk-r16b
